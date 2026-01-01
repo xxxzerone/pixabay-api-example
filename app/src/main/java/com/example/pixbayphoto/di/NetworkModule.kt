@@ -1,36 +1,42 @@
 package com.example.pixbayphoto.di
 
-import com.example.pixbayphoto.data.api.PixabayApi
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import android.util.Log
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-private const val BASE_URL = "https://pixabay.com/"
+private const val BASE_URL = "https://pixabay.com/api/"
 
 val networkModule = module {
     single {
-        HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+        HttpClient(OkHttp) {
+            install(ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                    prettyPrint = true
+                    isLenient = true
+                })
+            }
+
+            install(Logging) {
+                level = LogLevel.BODY
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Log.d("Ktor", message)
+                    }
+                }
+            }
+
+            defaultRequest {
+                url(BASE_URL)
+            }
         }
-    }
-
-    single {
-        OkHttpClient.Builder()
-            .addInterceptor(get<HttpLoggingInterceptor>())
-            .build()
-    }
-
-    single {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(get())
-            .build()
-    }
-
-    single<PixabayApi> {
-        get<Retrofit>().create(PixabayApi::class.java)
     }
 }

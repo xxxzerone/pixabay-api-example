@@ -6,5 +6,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<PixabayRepository> { PixabayRepositoryImpl(pixabayApi = get(), context = androidContext()) }
+    single<PixabayRepository> {
+        PixabayRepositoryImpl(context = androidContext(), httpClient = get())
+    }
 }

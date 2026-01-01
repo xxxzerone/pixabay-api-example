@@ -66,17 +66,18 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.ktor)
     testImplementation(libs.koin.test)
 
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
+    // Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.logging)
 
     // Coil
     implementation(libs.coil.compose)
-
-    // Logging Interceptor
-    implementation(libs.logging.interceptor)
 
     // Tests
     testImplementation(libs.kotlinx.coroutines.test)
