@@ -15,16 +15,18 @@ import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.util.network.UnresolvedAddressException
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.SerializationException
 
 class PixabayRepositoryImpl(
     context: Context,
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
 ) : PixabayRepository {
     private val apiKey = context.getString(R.string.pixabay_key)
 
-    override suspend fun loadPhoto(query: String): Result<List<Pixabay>, NetworkError> {
-        return try {
+    override fun loadPhoto(query: String): Flow<Result<List<Pixabay>, NetworkError>> = flow {
+        try {
             val response: PixabayResponse = httpClient.get {
                 parameter("key", apiKey)
                 parameter("q", query)
@@ -32,21 +34,18 @@ class PixabayRepositoryImpl(
             }.body()
 
             val pixabays = response.hits?.map { it.toModel() } ?: emptyList()
-
-            Result.Success(pixabays)
-        } catch (_: UnresolvedAddressException) {
-            // 인터넷 연결 끊김
-            Result.Failure(NetworkError.NetworkUnavailable)
-        } catch (_: HttpRequestTimeoutException) {
-            // 타임 아웃
-            Result.Failure(NetworkError.Timeout)
-        } catch (e: ResponseException) {
-            // 3xx, 4xx, 5xx 에러
-            Result.Failure(NetworkError.HttpError(e.response.status.value))
-        } catch (_: SerializationException) {
-            Result.Failure(NetworkError.ParseError)
+            emit(Result.Success(pixabays))
         } catch (e: Exception) {
-            Result.Failure(NetworkError.Unknown(e.message ?: "알 수 없는 오류입니다."))
+            val error = when (e) {
+                // 인터넷 연결 끊김
+                is UnresolvedAddressException -> NetworkError.NetworkUnavailable
+                is HttpRequestTimeoutException -> NetworkError.Timeout
+                // 3xx, 4xx, 5xx 에러
+                is ResponseException -> NetworkError.HttpError(e.response.status.value)
+                is SerializationException -> NetworkError.ParseError
+                else -> NetworkError.Unknown(e.message ?: "알 수 없는 오류입니다.")
+            }
+            emit(Result.Failure(error))
         }
     }
 }
