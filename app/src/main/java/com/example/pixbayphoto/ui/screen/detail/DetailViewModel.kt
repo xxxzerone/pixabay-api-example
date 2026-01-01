@@ -1,25 +1,20 @@
 package com.example.pixbayphoto.ui.screen.detail
 
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pixbayphoto.R
-import com.example.pixbayphoto.data.api.pixabayService
-import com.example.pixbayphoto.data.mapper.toModel
+import com.example.pixbayphoto.core.Result
+import com.example.pixbayphoto.domain.repository.PixabayRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
-    context: Context,
+    private val pixabayRepository: PixabayRepository,
     private val id: Int
 ) : ViewModel() {
     private val _state = MutableStateFlow(DetailState())
     val state = _state.asStateFlow()
-
-    private val _pixabayKey = context.getString(R.string.pixabay_key)
 
     init {
         fetchPixabay()
@@ -27,26 +22,21 @@ class DetailViewModel(
 
     private fun fetchPixabay() {
         viewModelScope.launch {
-            try {
-                val response = pixabayService.loadPixabayData(
-                    key = _pixabayKey,
-                    q = "",
-                    type = "photo"
-                )
+            _state.update { it.copy(isLoading = true) }
 
-                Log.d("MainViewModel fetchPixabay", "${response.hits}")
-                val pixabay = response.hits?.firstOrNull() { it.id == id }?.toModel()
+            val result = pixabayRepository.loadPhoto(query = "")
+            when (result) {
+                is Result.Success -> {
+                    val pixabay = result.data.firstOrNull { it.id == id }
 
-                _state.update {
-                    it.copy(
-                        pixabay = pixabay,
-                        isLoading = false
-                    )
+                    _state.update {
+                        it.copy(pixabay = pixabay, isLoading = false)
+                    }
                 }
-            } catch (e: Exception) {
-                Log.e("MainViewModel fetchPixabay", "${e.message}")
-                _state.update {
-                    it.copy(isLoading = false, error = "Fetching Pixabay Error: ${e.message}")
+                is Result.Failure -> {
+                    _state.update {
+                        it.copy(isLoading = false, error = "Error: ${result.message}")
+                    }
                 }
             }
         }

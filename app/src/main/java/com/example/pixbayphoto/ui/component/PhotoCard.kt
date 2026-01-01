@@ -11,7 +11,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.example.pixbayphoto.domain.Pixabay
+import com.example.pixbayphoto.domain.model.Pixabay
 import com.example.pixbayphoto.ui.screen.main.MainAction
 
 @Composable

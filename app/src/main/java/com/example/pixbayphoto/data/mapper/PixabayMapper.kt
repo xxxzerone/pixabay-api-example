@@ -1,7 +1,7 @@
 package com.example.pixbayphoto.data.mapper
 
 import com.example.pixbayphoto.data.dto.PixabayDto
-import com.example.pixbayphoto.domain.Pixabay
+import com.example.pixbayphoto.domain.model.Pixabay
 
 fun PixabayDto.toModel(): Pixabay {
     return Pixabay(

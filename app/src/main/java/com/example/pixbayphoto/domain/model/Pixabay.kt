@@ -1,4 +1,4 @@
-package com.example.pixbayphoto.domain
+package com.example.pixbayphoto.domain.model
 
 data class Pixabay(
     val id: Int,
