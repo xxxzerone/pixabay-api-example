@@ -1,17 +1,9 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
-}
-
-val localProperties = Properties().apply {
-    val file = rootProject.file("local.properties")
-    if (file.exists()) {
-        load(file.inputStream())
-    }
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -30,13 +22,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    val pixabayKey = localProperties.getProperty("PIXABAY_KEY") ?: ""
-
     buildTypes {
-        debug {
-            isMinifyEnabled = false
-            resValue("string", "pixabay_key", pixabayKey)
-        }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -55,31 +41,28 @@ android {
 }
 
 dependencies {
-    // Navigation3
-    implementation(libs.androidx.navigation3.ui)
-    implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-    implementation(libs.androidx.material3.adaptive.navigation3)
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    // Koin
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.android)
-    implementation(libs.koin.compose)
-    implementation(libs.koin.compose.viewmodel)
-    testImplementation(libs.koin.test)
+    // Navigation Compose
+    implementation(libs.androidx.navigation.compose)
 
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
+    // Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.mock)
 
-    // Coil
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
+    // Coil Compose
     implementation(libs.coil.compose)
 
-    // Logging Interceptor
-    implementation(libs.logging.interceptor)
-
     // Tests
-    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
 
     implementation(libs.androidx.core.ktx)
