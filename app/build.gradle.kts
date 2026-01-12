@@ -1,9 +1,18 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
+}
+
+val localProperties = Properties().apply {
+    val propertiesFile = rootProject.file("local.properties")
+    if (propertiesFile.exists()) {
+        propertiesFile.inputStream().use { load(it) }
+    }
 }
 
 android {
@@ -23,8 +32,15 @@ android {
     }
 
     buildTypes {
+        val pixabayKey = localProperties.getProperty("PIXABAY_KEY") ?: ""
+
+        debug {
+            isMinifyEnabled = false
+            resValue("string", "pixabay_api_key", "")
+        }
         release {
             isMinifyEnabled = false
+            resValue("string", "pixabay_api_key", pixabayKey)
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -37,6 +53,18 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+
+    flavorDimensions += "environment"
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+        }
+        create("prod") {
+            dimension = "environment"
+        }
     }
 }
 
