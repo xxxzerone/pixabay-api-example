@@ -3,6 +3,7 @@ package com.example.pixbayphoto.ui.screen.main
 import com.example.pixbayphoto.core.Result
 import com.example.pixbayphoto.domain.model.Pixabay
 import com.example.pixbayphoto.domain.repository.PixabayRepository
+import com.example.pixbayphoto.util.MainDispatcherRule
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 /**
@@ -28,23 +30,17 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainViewModelTest {
 
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     private val pixabayRepository: PixabayRepository = mockk()
     private lateinit var viewModel: MainViewModel
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
 
     /**
      * ViewModel 초기화 시 자동으로 데이터를 로드하는지 테스트합니다.
      */
     @Test
     fun `init loads photos correctly`() = runTest {
-        // Given: 테스트 스케줄러와 연동된 Dispatcher 설정
-        val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
-
         // Given: Repository가 성공적으로 데이터를 반환하도록 설정합니다.
         val expectedPhotos = listOf(
             Pixabay(1, "user1", "tags", "url"),
@@ -71,10 +67,6 @@ class MainViewModelTest {
      */
     @Test
     fun `search query change triggers fetch after debounce`() = runTest {
-        // Given: 테스트 스케줄러와 연동된 Dispatcher 설정
-        val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
-
         // Given: 초기 로드와 검색 로드에 대한 Mock 응답을 설정합니다.
         coEvery { pixabayRepository.loadPhoto(any()) } returns flowOf(Result.Success(emptyList()))
         
@@ -104,9 +96,6 @@ class MainViewModelTest {
     @Test
     fun `loading state updates correctly`() = runTest {
         // Given
-        val dispatcher = StandardTestDispatcher(testScheduler)
-        Dispatchers.setMain(dispatcher)
-
         coEvery { pixabayRepository.loadPhoto(any()) } returns flowOf(Result.Success(emptyList()))
         viewModel = MainViewModel(pixabayRepository)
         advanceUntilIdle()
