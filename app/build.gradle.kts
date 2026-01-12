@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.logging)
+    testImplementation(libs.ktor.client.mock)
 
     // Coil
     implementation(libs.coil.compose)
@@ -82,7 +83,6 @@ dependencies {
     // Tests
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
-    testImplementation(libs.ktor.client.mock)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
