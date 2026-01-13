@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 
 class MockItemRepositoryImpl : ItemRepository {
 
-    private val _items = MutableStateFlow<List<Item>>(
+    private val _items = MutableStateFlow(
         listOf(
             Item(
                 id = 6162613,

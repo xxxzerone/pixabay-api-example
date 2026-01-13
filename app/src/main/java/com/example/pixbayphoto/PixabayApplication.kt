@@ -1,11 +1,7 @@
 package com.example.pixbayphoto
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-class PixabayApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-
-
-    }
-}
+@HiltAndroidApp
+class PixabayApplication : Application()
