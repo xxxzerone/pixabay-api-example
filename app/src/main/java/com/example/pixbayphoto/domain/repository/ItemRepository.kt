@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface ItemRepository {
     fun getItemsSortedById(): Flow<List<Item>>
-    fun getItemById(id: Long): Flow<Item>
+    fun getItemById(id: Long): Flow<Item?>
 }
