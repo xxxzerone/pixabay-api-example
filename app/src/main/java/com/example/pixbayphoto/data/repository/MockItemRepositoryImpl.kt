@@ -1,11 +1,14 @@
 package com.example.pixbayphoto.data.repository
 
+import com.example.pixbayphoto.domain.common.Resource
 import com.example.pixbayphoto.domain.model.Item
 import com.example.pixbayphoto.domain.repository.ItemRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 class MockItemRepositoryImpl : ItemRepository {
 
@@ -84,17 +87,36 @@ class MockItemRepositoryImpl : ItemRepository {
         )
     )
 
-    override fun getItemsSortedById(): Flow<List<Item>> =
-        _items
-            .map { items ->
-                items.sortedByDescending { it.id }
+    override fun getItemsSortedById(): Flow<Resource<List<Item>>> {
+        return _items
+            .map<List<Item>, Resource<List<Item>>> { items ->
+                Resource.Success(items.sortedByDescending { it.id })
+            }
+            .onStart {
+                emit(Resource.Loading)
+            }
+            .catch { e ->
+                emit(Resource.Error(message = e.localizedMessage, throwable = e))
             }
             .distinctUntilChanged()
+    }
 
-    override fun getItemById(id: Long): Flow<Item?> =
-        _items
+    override fun getItemById(id: Long): Flow<Resource<Item>> {
+        return _items
             .map { items ->
-                items.firstOrNull { it.id == id }
+                val item = items.firstOrNull { it.id == id }
+                if (item != null) {
+                    Resource.Success(item)
+                } else {
+                    Resource.Error(message = "ID가 ${id}인 아이템을 찾을 수 없습니다.")
+                }
+            }
+            .onStart {
+                emit(Resource.Loading)
+            }
+            .catch { e ->
+                emit(Resource.Error(message = e.localizedMessage, throwable = e))
             }
             .distinctUntilChanged()
+    }
 }
