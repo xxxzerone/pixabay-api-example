@@ -21,6 +21,7 @@
 - Unit Test 추가
   - [x] Repository
   - [x] UseCase
+- [x] Main Event File 추가
 - [ ] ViewModel 추가
 - [ ] ViewModel Unit Test 추가
 - [ ] UI 추가
