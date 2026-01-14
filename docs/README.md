@@ -17,10 +17,10 @@
   - Repository Interface
   - UseCase
 - [x] Custom Result 클래스 추가
-- [ ] Mock 구현체 추가
+- [x] Mock 구현체 추가
 - Unit Test 추가
-  - [ ] Repository
-  - [ ] UseCase
+  - [x] Repository
+  - [x] UseCase
 - [ ] ViewModel 추가
-- [ ] Unit Test 추가 (ViewModel)
+- [ ] ViewModel Unit Test 추가
 - [ ] UI 추가

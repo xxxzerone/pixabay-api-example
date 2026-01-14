@@ -3,10 +3,12 @@ package com.example.pixbayphoto.data.repository
 import com.example.pixbayphoto.domain.common.Resource
 import com.example.pixbayphoto.domain.model.Item
 import com.example.pixbayphoto.domain.repository.ItemRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
@@ -99,6 +101,7 @@ class MockItemRepositoryImpl : ItemRepository {
                 emit(Resource.Error(message = e.localizedMessage, throwable = e))
             }
             .distinctUntilChanged()
+            .flowOn(Dispatchers.IO)
     }
 
     override fun getItemById(id: Long): Flow<Resource<Item>> {
@@ -118,5 +121,6 @@ class MockItemRepositoryImpl : ItemRepository {
                 emit(Resource.Error(message = e.localizedMessage, throwable = e))
             }
             .distinctUntilChanged()
+            .flowOn(Dispatchers.IO)
     }
 }

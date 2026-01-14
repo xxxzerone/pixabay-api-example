@@ -69,7 +69,7 @@ class MockItemRepositoryImplTest {
     }
 
     @Test
-    fun `getItemById 호출 시 존재하지 않는 ID를 입력하면 null을 반환한다`() = runTest {
+    fun `getItemById 호출 시 존재하지 않는 ID를 입력하면 Error를 반환한다`() = runTest {
         // given
         val nonExistentId = Long.MAX_VALUE
 
