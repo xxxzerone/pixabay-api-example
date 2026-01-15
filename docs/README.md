@@ -28,6 +28,6 @@
   - OnValueChange
   - OnSearchAction
 - [x] Main State 추가 
-- [ ] ViewModel 추가
-- [ ] ViewModel Unit Test 추가
-- [ ] UI 추가
+- [ ] Main ViewModel 추가
+- [ ] Main ViewModel Unit Test 추가
+- [ ] Main UI 추가
