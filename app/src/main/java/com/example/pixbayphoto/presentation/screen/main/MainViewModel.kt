@@ -6,7 +6,9 @@ import com.example.pixbayphoto.domain.common.Resource
 import com.example.pixbayphoto.domain.model.Item
 import com.example.pixbayphoto.domain.usecase.GetItemsSortedByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -20,6 +22,9 @@ class MainViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(MainState())
     val state = _state.asStateFlow()
+
+    private val _event = MutableSharedFlow<MainEvent>()
+    val event = _event.asSharedFlow()
 
     init {
         fetchItems()

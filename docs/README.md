@@ -30,6 +30,5 @@
 - [x] Main State 추가 
 - [x] Main ViewModel 추가
 - [x] Main ViewModel Unit Test 추가
-- [ ] Main Event 작성
-- [ ] Main ViewModel Unit Test 추가
+- [x] Main Event 작성
 - [ ] Main UI 추가
