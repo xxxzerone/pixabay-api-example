@@ -34,7 +34,8 @@ fun MainRoot(
             .fillMaxSize()
     ) {
         MainScreen(
-            state = state.value
+            state = state.value,
+            onAction = viewModel::onAction
         )
 
         SnackbarHost(

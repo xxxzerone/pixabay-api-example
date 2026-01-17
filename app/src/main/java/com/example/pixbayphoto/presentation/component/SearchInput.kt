@@ -28,6 +28,7 @@ fun SearchInput(
     value: String,
     label: String,
     onValueChange: (String) -> Unit,
+    onSearchAction: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
@@ -43,7 +44,7 @@ fun SearchInput(
             shape = RoundedCornerShape(10.dp),
             label = { Text(label, fontSize = 24.sp, fontWeight = FontWeight.SemiBold) },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(onSearch = {}),
+            keyboardActions = KeyboardActions(onSearch = { onSearchAction(value) }),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color(0xFF009688),
                 unfocusedBorderColor = Color(0xFFBFBFBF),
@@ -66,7 +67,8 @@ private fun SearchInputPreview() {
         SearchInput(
             value = "",
             label = "Search",
-            onValueChange = {}
+            onValueChange = {},
+            onSearchAction = {}
         )
     }
 }

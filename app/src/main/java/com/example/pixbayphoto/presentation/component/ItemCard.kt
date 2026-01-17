@@ -14,8 +14,13 @@ import coil.compose.AsyncImage
 import com.example.pixbayphoto.domain.model.Item
 
 @Composable
-fun ItemCard(item: Item, modifier: Modifier = Modifier) {
+fun ItemCard(
+    item: Item,
+    onCardClick: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Card(
+        onClick = { onCardClick(item.id) },
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1f), // 1:1 정사각형 비율로 만들기

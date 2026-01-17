@@ -37,3 +37,11 @@
   - ErrorMessage Component
   - MainRoot
   - MainScreen
+- [x] 검색 debounce 기능 구현
+  - Repository, UseCase query 받아서 처리하도록 업데이트
+- [x] UI Action 연결
+- [ ] Navigation Compose 구현
+- [ ] Detail State 추가
+- [ ] Detail ViewModel 추가
+- [ ] Detail ViewModel Unit Test 추가
+- [ ] Detail UI 추가

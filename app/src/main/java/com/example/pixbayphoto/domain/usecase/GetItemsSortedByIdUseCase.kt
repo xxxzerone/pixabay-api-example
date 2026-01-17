@@ -10,7 +10,7 @@ class GetItemsSortedByIdUseCase @Inject constructor(
     private val repository: ItemRepository,
 ) {
 
-    operator fun invoke(): Flow<Resource<List<Item>>> {
-        return repository.getItemsSortedById()
+    operator fun invoke(query: String): Flow<Resource<List<Item>>> {
+        return repository.getItemsSortedById(query)
     }
 }

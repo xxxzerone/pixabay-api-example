@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -15,7 +14,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -33,10 +31,11 @@ import com.example.pixbayphoto.presentation.component.SearchInput
 fun MainScreen(
     state: MainState,
     modifier: Modifier = Modifier,
+    onAction: (MainAction) -> Unit = {},
 ) {
     PullToRefreshBox(
         isRefreshing = state.isLoading,
-        onRefresh = {},
+        onRefresh = { onAction(MainAction.OnRefresh(state.query)) },
         modifier = modifier.fillMaxSize()
     ) {
         Column(
@@ -45,7 +44,12 @@ fun MainScreen(
                 .statusBarsPadding()
                 .padding(20.dp)
         ) {
-            SearchInput(value = state.query, label = "Search", onValueChange = {})
+            SearchInput(
+                value = state.query,
+                label = "Search",
+                onValueChange = { onAction(MainAction.OnValueChange(it)) },
+                onSearchAction = { onAction(MainAction.OnSearchAction(it)) }
+            )
 
             Spacer(Modifier.height(20.dp))
 
@@ -62,7 +66,7 @@ fun MainScreen(
                     state.error != null -> {
                         ErrorMessage(
                             message = state.error,
-                            onRetry = { /* 다시 시도 로직 */ },
+                            onRetry = { onAction(MainAction.OnRetry(state.query)) },
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
@@ -86,7 +90,10 @@ fun MainScreen(
                             contentPadding = PaddingValues(bottom = 20.dp)
                         ) {
                             items(state.items, key = { it.id }) { item ->
-                                ItemCard(item = item)
+                                ItemCard(
+                                    item = item,
+                                    onCardClick = { onAction(MainAction.OnImageClick(it)) }
+                                )
                             }
                         }
                     }

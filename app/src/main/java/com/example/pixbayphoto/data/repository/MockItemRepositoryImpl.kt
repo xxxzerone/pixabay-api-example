@@ -89,10 +89,14 @@ class MockItemRepositoryImpl : ItemRepository {
         )
     )
 
-    override fun getItemsSortedById(): Flow<Resource<List<Item>>> {
+    override fun getItemsSortedById(query: String): Flow<Resource<List<Item>>> {
         return _items
             .map<List<Item>, Resource<List<Item>>> { items ->
-                Resource.Success(items.sortedByDescending { it.id })
+                val data = items
+                    .filter { it.tags.contains(query) }
+                    .sortedByDescending { it.id }
+
+                Resource.Success(data)
             }
             .onStart {
                 emit(Resource.Loading)
