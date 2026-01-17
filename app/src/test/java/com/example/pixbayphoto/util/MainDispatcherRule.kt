@@ -11,7 +11,7 @@ import org.junit.runner.Description
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainDispatcherRule(
-    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher() // UnconfinedTestDispatcher()는 코루틴이 시작되자마자 즉시 실행
 ) : TestWatcher() {
 
     override fun starting(description: Description?) {
