@@ -31,4 +31,9 @@
 - [x] Main ViewModel 추가
 - [x] Main ViewModel Unit Test 추가
 - [x] Main Event 작성
-- [ ] Main UI 추가
+- [x] Main UI 추가
+  - SearchInput Component
+  - ItemCard Component
+  - ErrorMessage Component
+  - MainRoot
+  - MainScreen

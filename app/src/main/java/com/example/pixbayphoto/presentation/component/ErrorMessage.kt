@@ -1,0 +1,41 @@
+package com.example.pixbayphoto.presentation.component
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+
+@Composable
+fun ErrorMessage(
+    message: String,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(imageVector = Icons.Default.Warning, contentDescription = null, tint = Color.Red)
+        Text(text = message, textAlign = TextAlign.Center)
+        TextButton(onClick = onRetry) {
+            Text("다시 시도")
+        }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun ErrorMessagePreview() {
+    ErrorMessage(
+        message = "데이터를 가져오는데 실패했습니다.",
+        onRetry = {}
+    )
+}

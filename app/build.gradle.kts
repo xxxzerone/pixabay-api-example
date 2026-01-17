@@ -90,9 +90,13 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.navigation.compose)
 
     // Coil Compose
     implementation(libs.coil.compose)
+
+    // Collections Immutable
+    implementation(libs.kotlinx.collections.immutable)
 
     // Tests
     testImplementation(libs.mockk)
