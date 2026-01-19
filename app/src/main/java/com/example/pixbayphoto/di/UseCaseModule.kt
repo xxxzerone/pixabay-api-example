@@ -1,7 +1,7 @@
 package com.example.pixbayphoto.di
 
 import com.example.pixbayphoto.domain.repository.ItemRepository
-import com.example.pixbayphoto.domain.usecase.GetItemById
+import com.example.pixbayphoto.domain.usecase.GetItemByIdUseCase
 import com.example.pixbayphoto.domain.usecase.GetItemsSortedByIdUseCase
 import dagger.Module
 import dagger.Provides
@@ -21,7 +21,7 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideGetItemByIdUseCase(itemRepository: ItemRepository): GetItemById {
-        return GetItemById(repository = itemRepository)
+    fun provideGetItemByIdUseCase(itemRepository: ItemRepository): GetItemByIdUseCase {
+        return GetItemByIdUseCase(repository = itemRepository)
     }
 }

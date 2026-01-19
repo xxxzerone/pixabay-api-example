@@ -16,11 +16,11 @@ import org.junit.Test
 class GetItemByIdTest {
 
     private val repository: ItemRepository = mockk()
-    private lateinit var useCase: GetItemById
+    private lateinit var useCase: GetItemByIdUseCase
 
     @Before
     fun setUp() {
-        useCase = GetItemById(repository)
+        useCase = GetItemByIdUseCase(repository)
     }
 
     @Test

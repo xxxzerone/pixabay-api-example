@@ -33,13 +33,13 @@ class GetItemsSortedByIdUseCaseTest {
             Resource.Loading,
             Resource.Success(mockItems)
         )
-        every { repository.getItemsSortedById() } returns expectedFlow
+        every { repository.getItemsSortedById("") } returns expectedFlow
 
         // when
-        val result = useCase().toList()
+        val result = useCase("").toList()
 
         // then
-        verify { repository.getItemsSortedById() }
+        verify { repository.getItemsSortedById("") }
 
         assertEquals(2, result.size)
         assertTrue(result[0] is Resource.Loading)
@@ -55,13 +55,13 @@ class GetItemsSortedByIdUseCaseTest {
             Resource.Loading,
             Resource.Error(message = errorMessage)
         )
-        every { repository.getItemsSortedById() } returns expectedFlow
+        every { repository.getItemsSortedById("") } returns expectedFlow
 
         // when
-        val result = useCase().toList()
+        val result = useCase("").toList()
 
         // then
-        verify { repository.getItemsSortedById() }
+        verify { repository.getItemsSortedById("") }
 
         assertTrue(result[0] is Resource.Loading)
         assertTrue(result[1] is Resource.Error)

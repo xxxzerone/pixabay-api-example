@@ -6,7 +6,7 @@ import com.example.pixbayphoto.domain.repository.ItemRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetItemById @Inject constructor(
+class GetItemByIdUseCase @Inject constructor(
     private val repository: ItemRepository,
 ) {
 

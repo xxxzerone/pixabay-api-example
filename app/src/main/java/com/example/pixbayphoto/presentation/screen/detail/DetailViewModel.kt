@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.pixbayphoto.domain.common.Resource
 import com.example.pixbayphoto.domain.model.Item
-import com.example.pixbayphoto.domain.usecase.GetItemById
+import com.example.pixbayphoto.domain.usecase.GetItemByIdUseCase
 import com.example.pixbayphoto.presentation.navigation.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getItemById: GetItemById
+    private val getItemByIdUseCase: GetItemByIdUseCase
 ) : ViewModel() {
 
     private val _detailRoute: Route.Detail = savedStateHandle.toRoute()
@@ -42,7 +42,7 @@ class DetailViewModel @Inject constructor(
     }
 
     private fun fetchItemDetail() {
-        getItemById(_itemId)
+        getItemByIdUseCase(_itemId)
             .onEach { resource ->
                 when (resource) {
                     Resource.Loading -> _state.update { it.copy(isLoading = true) }
