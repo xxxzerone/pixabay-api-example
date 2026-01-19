@@ -14,6 +14,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun MainRoot(
+    navigateToDetail: (Long) -> Unit,
     viewModel: MainViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
@@ -23,7 +24,7 @@ fun MainRoot(
     LaunchedEffect(Unit) {
         viewModel.event.collect { event ->
             when (event) {
-                is MainEvent.NavigateToDetail -> TODO()
+                is MainEvent.NavigateToDetail -> navigateToDetail(event.id)
                 is MainEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.message)
             }
         }

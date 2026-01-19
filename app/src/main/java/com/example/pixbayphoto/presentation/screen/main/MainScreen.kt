@@ -41,8 +41,7 @@ fun MainScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
-                .padding(20.dp)
+                .padding(horizontal = 20.dp)
         ) {
             SearchInput(
                 value = state.query,
