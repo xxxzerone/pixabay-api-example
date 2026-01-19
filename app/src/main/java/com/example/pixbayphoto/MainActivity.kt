@@ -24,8 +24,8 @@ class MainActivity : ComponentActivity() {
             PixbayPhotoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NavGraph(
-                        navController = navController,
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        navController = navController
                     )
                 }
             }
