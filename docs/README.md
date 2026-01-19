@@ -42,7 +42,7 @@
 - [x] UI Action 연결
 - [x] Navigation Compose 구현
 - [x] Detail Event, Action File 추가
-- [ ] Detail State 추가
+- [x] Detail State 추가
 - [ ] Detail ViewModel 추가
 - [ ] Detail ViewModel Unit Test 추가
 - [ ] Detail UI 추가
