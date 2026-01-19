@@ -1,16 +1,24 @@
 package com.example.pixbayphoto.presentation.screen.detail
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.LaunchedEffect
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun DetailRoot(
-    itemId: Long,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    viewModel: DetailViewModel = hiltViewModel()
 ) {
-    DetailScreen(itemId = itemId)
+    val state = viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.event.collect { event ->
+            // TODO: Implement event
+        }
+    }
+
+    DetailScreen(
+        state = state.value
+    )
 }

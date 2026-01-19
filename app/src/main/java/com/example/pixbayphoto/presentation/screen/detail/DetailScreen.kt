@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun DetailScreen(
-    itemId: Long,
+    state: DetailState,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Detail Screen for item: $itemId")
+        Text(text = "Detail Screen for item: ${state.item?.id}")
     }
 }
