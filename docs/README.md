@@ -45,4 +45,8 @@
 - [x] Detail State 추가
 - [x] Detail ViewModel 추가
 - [x] Detail ViewModel Unit Test 추가
-- [ ] Detail UI 추가
+- [x] Detail UI 추가
+
+### Production 환경 기능 구현
+- [ ] Mock 구현체를 `dev` 환경으로 이동
+- [ ] 외부 API 요청 `prod` 환경에서 구현

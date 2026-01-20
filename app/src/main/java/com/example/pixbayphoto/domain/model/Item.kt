@@ -5,5 +5,6 @@ data class Item(
     val pageUrl: String,
     val type: String,
     val tags: String,
-    val previewUrl: String
+    val previewUrl: String,
+    val user: String
 )

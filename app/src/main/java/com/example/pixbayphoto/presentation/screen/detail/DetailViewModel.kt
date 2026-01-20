@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getItemByIdUseCase: GetItemByIdUseCase
+    private val getItemByIdUseCase: GetItemByIdUseCase,
 ) : ViewModel() {
 
     private val _detailRoute: Route.Detail = savedStateHandle.toRoute()
@@ -38,20 +38,23 @@ class DetailViewModel @Inject constructor(
     }
 
     fun onAction(action: DetailAction) {
-        // TODO: Implement action
+        when (action) {
+            is DetailAction.OnRetry -> fetchItemDetail()
+        }
     }
 
     private fun fetchItemDetail() {
         getItemByIdUseCase(_itemId)
             .onEach { resource ->
                 when (resource) {
-                    Resource.Loading -> _state.update { it.copy(isLoading = true) }
+                    Resource.Loading -> _state.update { it.copy(isLoading = true, error = null) }
                     is Resource.Success<Item> -> _state.update {
                         it.copy(
                             item = resource.data,
                             isLoading = false
                         )
                     }
+
                     is Resource.Error -> _state.update {
                         it.copy(
                             error = resource.message,

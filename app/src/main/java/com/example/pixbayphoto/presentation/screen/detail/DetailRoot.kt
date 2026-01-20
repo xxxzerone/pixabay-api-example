@@ -14,11 +14,14 @@ fun DetailRoot(
 
     LaunchedEffect(Unit) {
         viewModel.event.collect { event ->
-            // TODO: Implement event
+            when (event) {
+                DetailEvent.NavigateToBack -> onBack()
+            }
         }
     }
 
     DetailScreen(
-        state = state.value
+        state = state.value,
+        onAction = viewModel::onAction
     )
 }

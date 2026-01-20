@@ -62,7 +62,7 @@ class MainViewModel @Inject constructor(
         getItemsSortedByIdUseCase(query)
             .onEach { resource ->
                 when (resource) {
-                    Resource.Loading -> _state.update { it.copy(isLoading = true) }
+                    Resource.Loading -> _state.update { it.copy(isLoading = true, error = null) }
                     is Resource.Success<List<Item>> -> _state.update {
                         it.copy(
                             items = resource.data,
