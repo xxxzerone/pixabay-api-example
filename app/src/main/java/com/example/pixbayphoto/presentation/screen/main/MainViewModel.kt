@@ -2,8 +2,7 @@ package com.example.pixbayphoto.presentation.screen.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pixbayphoto.domain.common.Resource
-import com.example.pixbayphoto.domain.model.Item
+import com.example.pixbayphoto.domain.common.fold
 import com.example.pixbayphoto.domain.usecase.GetItemsSortedByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -61,21 +60,12 @@ class MainViewModel @Inject constructor(
     private fun fetchItems(query: String = "") {
         getItemsSortedByIdUseCase(query)
             .onEach { resource ->
-                when (resource) {
-                    Resource.Loading -> _state.update { it.copy(isLoading = true, error = null) }
-                    is Resource.Success<List<Item>> -> _state.update {
-                        it.copy(
-                            items = resource.data,
-                            isLoading = false
-                        )
-                    }
-
-                    is Resource.Error -> _state.update {
-                        it.copy(
-                            error = resource.message,
-                            isLoading = false
-                        )
-                    }
+                _state.update {
+                    resource.fold(
+                        onSuccess = { data -> it.copy(isLoading = false, items = data) },
+                        onError = { message, _ -> it.copy(isLoading = false, error = message) },
+                        onLoading = { it.copy(isLoading = true) }
+                    )
                 }
             }
             .launchIn(viewModelScope)

@@ -23,3 +23,15 @@ inline fun <T> Resource<T>.onError(action: (String?, Throwable?) -> Unit): Resou
     if (this is Resource.Error) action(message, throwable)
     return this
 }
+
+inline fun <T, R> Resource<T>.fold(
+    onSuccess: (T) -> R,
+    onError: (String?, Throwable?) -> R,
+    onLoading: () -> R
+): R {
+    return when (this) {
+        is Resource.Success<T> -> onSuccess(data)
+        is Resource.Error -> onError(message, throwable)
+        Resource.Loading -> onLoading()
+    }
+}
