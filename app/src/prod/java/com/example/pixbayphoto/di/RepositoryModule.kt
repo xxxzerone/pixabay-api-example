@@ -1,5 +1,8 @@
 package com.example.pixbayphoto.di
 
+import com.example.pixbayphoto.data.datasource.DataSource
+import com.example.pixbayphoto.data.mapper.ItemMapper
+import com.example.pixbayphoto.data.repository.ItemRepositoryImpl
 import com.example.pixbayphoto.domain.repository.ItemRepository
 import dagger.Module
 import dagger.Provides
@@ -13,7 +16,7 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun providesItemRepository(): ItemRepository {
-        TODO("Implement")
+    fun providesItemRepository(defaultDataSource: DataSource, mapper: ItemMapper): ItemRepository {
+        return ItemRepositoryImpl(dataSource = defaultDataSource, mapper = mapper)
     }
 }

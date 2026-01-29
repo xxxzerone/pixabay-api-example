@@ -34,15 +34,11 @@ android {
     }
 
     buildTypes {
-        val pixabayKey = localProperties.getProperty("PIXABAY_KEY") ?: ""
-
         debug {
             isMinifyEnabled = false
-            resValue("string", "pixabay_api_key", "")
         }
         release {
             isMinifyEnabled = false
-            resValue("string", "pixabay_api_key", pixabayKey)
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -60,15 +56,19 @@ android {
         compose = true
     }
 
+    val pixabayKey = localProperties.getProperty("PIXABAY_KEY") ?: ""
+
     flavorDimensions += "environment"
     productFlavors {
         create("dev") {
             dimension = "environment"
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
+            resValue("string", "pixabay_api_key", pixabayKey)
         }
         create("prod") {
             dimension = "environment"
+            resValue("string", "pixabay_api_key", pixabayKey)
         }
     }
 }
