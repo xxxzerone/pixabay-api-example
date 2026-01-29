@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
@@ -29,7 +29,7 @@ class MockItemRepositoryImplTest {
         val results = repository.getItemsSortedById("").first()
 
         // then
-        assertTrue(results is Resource.Loading)
+        Assert.assertTrue(results is Resource.Loading)
     }
 
     @Test
@@ -41,7 +41,7 @@ class MockItemRepositoryImplTest {
         val results = repository.getItemsSortedById("").take(2).toList()
 
         // then
-        assertTrue(results[0] is Resource.Loading)
+        Assert.assertTrue(results[0] is Resource.Loading)
 
         val successResult = results[1] as Resource.Success
         val items = successResult.data
@@ -49,9 +49,9 @@ class MockItemRepositoryImplTest {
         val ids = items.map { it.id }
         val sortedIds = ids.sortedByDescending { it }
 
-        assertEquals(10, items.size)
-        assertEquals(sortedIds, ids)
-        assertEquals(8252992L, items.first().id)
+        Assert.assertEquals(10, items.size)
+        Assert.assertEquals(sortedIds, ids)
+        Assert.assertEquals(8252992L, items.first().id)
     }
 
     @Test
@@ -65,11 +65,11 @@ class MockItemRepositoryImplTest {
             .first()
 
         // then
-        assertTrue(result is Resource.Success)
+        Assert.assertTrue(result is Resource.Success)
 
         val items = (result as Resource.Success).data
-        assertEquals(3, items.size)
-        assertTrue(items.all { it.tags.contains(query) })
+        Assert.assertEquals(3, items.size)
+        Assert.assertTrue(items.all { it.tags.contains(query) })
     }
 
     @Test
@@ -84,7 +84,7 @@ class MockItemRepositoryImplTest {
 
         // Act
         val items = (result as Resource.Success).data
-        assertTrue(items.isEmpty())
+        Assert.assertTrue(items.isEmpty())
     }
 
     @Test
@@ -99,7 +99,7 @@ class MockItemRepositoryImplTest {
             .first()
 
         // then
-        assertEquals(targetId, result.data.id)
+        Assert.assertEquals(targetId, result.data.id)
     }
 
     @Test
@@ -112,9 +112,9 @@ class MockItemRepositoryImplTest {
         val errorResult = results[1] as Resource.Error
 
         // then
-        assertTrue(results[0] is Resource.Loading)
-        assertTrue(results[1] is Resource.Error)
-        assertEquals("ID가 ${nonExistentId}인 아이템을 찾을 수 없습니다.", errorResult.message)
+        Assert.assertTrue(results[0] is Resource.Loading)
+        Assert.assertTrue(results[1] is Resource.Error)
+        Assert.assertEquals("ID가 ${nonExistentId}인 아이템을 찾을 수 없습니다.", errorResult.message)
     }
 
 }
