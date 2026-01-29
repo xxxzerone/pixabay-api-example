@@ -14,7 +14,9 @@ import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
-import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class DefaultDataSourceTest {
@@ -41,23 +43,23 @@ class DefaultDataSourceTest {
     """.trimIndent()
 
     @Test
-    fun `fetchItems 호출 시 올바른 URL과 파라미터가 전달되어야 한다`() = runTest {
+    fun `fetchQueryItems 호출 시 올바른 URL과 파라미터가 전달되어야 한다`() = runTest {
         // Arrange
         createDataSource { request ->
-            Assert.assertEquals("https://pixabay.com/api/", request.url.toString().substringBefore("?"))
-            Assert.assertEquals(testApiKey, request.url.parameters["key"])
-            Assert.assertEquals("rose", request.url.parameters["q"])
-            Assert.assertEquals("photo", request.url.parameters["image_type"])
+            assertEquals("https://pixabay.com/api/", request.url.toString().substringBefore("?"))
+            assertEquals(testApiKey, request.url.parameters["key"])
+            assertEquals("rose", request.url.parameters["q"])
+            assertEquals("photo", request.url.parameters["image_type"])
 
             respond(
                 content = jsonResponse,
-                status = HttpStatusCode.Companion.OK,
+                status = HttpStatusCode.OK,
                 headers = headersOf(HttpHeaders.ContentType, "${ContentType.Application.Json}")
             )
         }
 
         // Act
-        dataSource.fetchItems("rose")
+        dataSource.fetchQueryItems("rose")
     }
 
     @Test
@@ -66,18 +68,18 @@ class DefaultDataSourceTest {
         createDataSource {
             respond(
                 content = jsonResponse,
-                status = HttpStatusCode.Companion.OK,
+                status = HttpStatusCode.OK,
                 headers = headersOf(HttpHeaders.ContentType, "${ContentType.Application.Json}")
             )
         }
 
         // Act
-        val response = dataSource.fetchItems("flower")
+        val response = dataSource.fetchQueryItems("flower")
 
         // Assert
-        Assert.assertEquals(HttpStatusCode.Companion.OK.value, response.statusCode)
-        Assert.assertNotNull(response.body)
-        Assert.assertEquals(123L, response.body?.hits?.first()?.id)
+        assertEquals(HttpStatusCode.OK.value, response.statusCode)
+        assertNotNull(response.body)
+        assertEquals(123L, response.body?.hits?.first()?.id)
     }
 
     @Test
@@ -86,16 +88,16 @@ class DefaultDataSourceTest {
         createDataSource {
             respond(
                 content = "Internal Server Error",
-                status = HttpStatusCode.Companion.InternalServerError
+                status = HttpStatusCode.InternalServerError
             )
         }
 
         // Act
-        val response = dataSource.fetchItems("error")
+        val response = dataSource.fetchQueryItems("error")
 
         // Assert
-        Assert.assertEquals(500, response.statusCode)
-        Assert.assertNull(response.body)
+        assertEquals(500, response.statusCode)
+        assertNull(response.body)
     }
 
     @Test
@@ -106,11 +108,102 @@ class DefaultDataSourceTest {
         }
 
         // Act
-        val response = dataSource.fetchItems("timeout")
+        val response = dataSource.fetchQueryItems("timeout")
 
         // Assert
-        Assert.assertEquals(-1, response.statusCode)
-        Assert.assertNull(response.body)
+        assertEquals(-1, response.statusCode)
+        assertNull(response.body)
+    }
+
+    @Test
+    fun `fetchItemById 호출 시 올바른 URL과 파라미터가 전달되어야 한다`() = runTest {
+        // Arrange
+        createDataSource { request ->
+            assertEquals("https://pixabay.com/api/", request.url.toString().substringBefore("?"))
+            assertEquals(testApiKey, request.url.parameters["key"])
+            assertEquals("123", request.url.parameters["id"])
+            assertEquals("photo", request.url.parameters["image_type"])
+
+            respond(
+                content = jsonResponse,
+                status = HttpStatusCode.OK,
+                headers = headersOf(HttpHeaders.ContentType, "${ContentType.Application.Json}")
+            )
+        }
+
+        // Act
+        dataSource.fetchItemById(123L)
+    }
+
+    @Test
+    fun `존재하는 ID로 서버 응답이 성공적일 때 Response 객체에 데이터가 담겨야 한다`() = runTest {
+        // Arrange
+        createDataSource {
+            respond(
+                status = HttpStatusCode.OK,
+                headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString()),
+                content = jsonResponse
+            )
+        }
+
+        // Act
+        val response = dataSource.fetchItemById(123L)
+
+        // Assert
+        assertEquals(HttpStatusCode.OK.value, response.statusCode)
+        assertNotNull(response.body)
+        assertEquals(123L, response.body?.hits?.first()?.id)
+    }
+
+    @Test
+    fun `존재하지 않는 ID면 서버 에러가 발생해 400 에러 코드가 반환되어야 한다`() = runTest {
+        // Arrange
+        createDataSource {
+            respond(
+                status = HttpStatusCode.BadRequest,
+                content = "Image does not exist"
+            )
+        }
+
+        // Act
+        val response = dataSource.fetchItemById(0)
+
+        // Assert
+        assertEquals(400, response.statusCode)
+        assertNull(response.body)
+    }
+
+    @Test
+    fun `ID로 조회 시 서버 에러가 발생하면 body는 null이고 에러 코드가 반환되어야 한다`() = runTest {
+        // Arrange
+        createDataSource {
+            respond(
+                status = HttpStatusCode.InternalServerError,
+                content = "Internal Server Error"
+            )
+        }
+
+        // Act
+        val response = dataSource.fetchItemById(123L)
+
+        // Assert
+        assertEquals(500, response.statusCode)
+        assertNull(response.body)
+    }
+
+    @Test
+    fun `ID로 조회 시 네트워크 예외가 발생하면 statusCode가 -1인 Response를 반환해야 한다`() = runTest {
+        // Arrange
+        createDataSource {
+            throw Exception("Network Timeout")
+        }
+
+        // Act
+        val response = dataSource.fetchItemById(123L)
+
+        // Assert
+        assertEquals(-1, response.statusCode)
+        assertNull(response.body)
     }
 
     private fun createDataSource(handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData) {

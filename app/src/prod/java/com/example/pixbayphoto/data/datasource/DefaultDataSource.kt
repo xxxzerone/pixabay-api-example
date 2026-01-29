@@ -15,11 +15,29 @@ class DefaultDataSource(
 ) : DataSource {
     private val baseUrl = "https://pixabay.com/api/"
 
-    override suspend fun fetchItems(query: String): Response<ItemResponse> {
+    override suspend fun fetchQueryItems(query: String): Response<ItemResponse> {
         return try {
             val httpResponse = httpClient.get(baseUrl) {
                 parameter("key", apiKey)
                 parameter("q", query)
+                parameter("image_type", "photo")
+            }
+
+            Response(
+                headers = httpResponse.headers.toMap(),
+                statusCode = httpResponse.status.value,
+                body = if (httpResponse.status.isSuccess()) httpResponse.body() else null
+            )
+        } catch (e: Exception) {
+            Response(headers = emptyMap(), statusCode = -1, body = null)
+        }
+    }
+
+    override suspend fun fetchItemById(id: Long): Response<ItemResponse> {
+        return try {
+            val httpResponse = httpClient.get(baseUrl) {
+                parameter("key", apiKey)
+                parameter("id", id)
                 parameter("image_type", "photo")
             }
 
