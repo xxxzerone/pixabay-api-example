@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ItemDto(
     val id: Long? = null,
+    @SerialName("pageURL")
     val pageUrl: String? = null,
     val type: String? = null,
     val tags: String? = null,
