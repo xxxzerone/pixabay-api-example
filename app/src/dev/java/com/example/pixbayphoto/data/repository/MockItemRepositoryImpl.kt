@@ -11,8 +11,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import javax.inject.Inject
 
-class MockItemRepositoryImpl : ItemRepository {
+class MockItemRepositoryImpl @Inject constructor() : ItemRepository {
 
     private val _items = MutableStateFlow(
         listOf(
