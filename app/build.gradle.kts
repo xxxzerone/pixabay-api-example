@@ -1,12 +1,27 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.android.build.api.dsl.ApplicationExtension
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
-android {
+/**
+ * android {} 블록 내부에서 Kotlin DSL로 접근할 때
+ * 현재 사용하는 BaseAppModuleExtension 기반 확장은 deprecated 되었음.
+ * 대신 **ApplicationExtension**을 사용하라는 뜻.
+ * AGP 9.0부터는 android.newDsl=true가 기본
+ * 새로운 DSL에서 BaseAppModuleExtension은 내부용
+ * public extension으로는 더 이상 사용되지 않음
+ * AGP 10.0에서는 완전히 제거될 예정
+ *
+ * 해결 방법: 새로운 DSL 사용 (권장)
+ * Gradle에서 android {} 블록을 extensions.getByType<ApplicationExtension>() 형태로 접근
+ *
+ * https://developer.android.com/build/migrate-to-built-in-kotlin?utm_source=chatgpt.com
+ */
+val android = extensions.getByType<ApplicationExtension>()
+
+android.apply {
     namespace = "com.example.pixbayphoto"
     compileSdk {
         version = release(36)
@@ -37,11 +52,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
-        }
     }
     buildFeatures {
         compose = true
