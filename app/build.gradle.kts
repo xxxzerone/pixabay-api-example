@@ -80,8 +80,9 @@ dependencies {
     // Navigation Component
     implementation(libs.androidx.navigation.compose)
 
-    // Kotlin Serialization
+    // Kotlinx
     implementation(libs.kotlinx.serialization.json)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -94,10 +95,14 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.client.logging)
+    testImplementation(libs.ktor.client.mock)
 
     // Coil Compose
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    // Mockk
+    testImplementation(libs.mockk)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

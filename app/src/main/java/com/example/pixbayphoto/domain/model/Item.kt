@@ -20,7 +20,7 @@ data class Item(
     val collections: Int,
     val likes: Int,
     val comments: Int,
-    val userId: Int,
+    val userId: Long,
     val user: String,
     val userImageUrl: String,
     val noAiTraining: Boolean,
