@@ -7,10 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.pixbayphoto.navigation.NavGraph
 import com.example.pixbayphoto.ui.theme.PixbayPhotoTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,14 +20,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             PixbayPhotoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Home(Modifier.padding(innerPadding))
+                    NavGraph(Modifier.padding(innerPadding))
                 }
             }
         }
     }
-}
-
-@Composable
-fun Home(modifier: Modifier = Modifier) {
-
 }
