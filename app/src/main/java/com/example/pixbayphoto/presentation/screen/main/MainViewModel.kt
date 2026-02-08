@@ -14,4 +14,9 @@ class MainViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState = _uiState.asStateFlow();
 
+    fun onAction(action: MainAction) {
+        when (action) {
+            else -> {}
+        }
+    }
 }
