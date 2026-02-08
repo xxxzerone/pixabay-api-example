@@ -29,7 +29,7 @@ class MainViewModel @Inject constructor(
 
     fun onAction(action: MainAction) {
         when (action) {
-            else -> {}
+            is MainAction.OnItemClick -> handleEvent(MainEvent.OnNavigateToDetail(action.id))
         }
     }
 
@@ -47,4 +47,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun handleEvent(event: MainEvent) {
+        viewModelScope.launch {
+            _uiEvent.emit(event)
+        }
+    }
 }

@@ -16,7 +16,7 @@ fun MainRoot(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                else -> {}
+                is MainEvent.OnNavigateToDetail -> onNavigateToDetail(event.id)
             }
         }
     }
