@@ -48,7 +48,7 @@ fun MainScreen(
                 onSearchAction = {}
             )
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(30.dp))
 
             Box(modifier = Modifier.fillMaxSize()) {
                 when {
