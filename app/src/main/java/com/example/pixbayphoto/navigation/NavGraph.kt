@@ -16,6 +16,11 @@ fun NavGraph(
         startDestination = Route.Main,
         modifier = modifier
     ) {
-        mainRoot()
+        mainRoot(
+            navigateToDetail = { id ->
+                navController.navigate(Route.Detail(id))
+            }
+        )
+        detailRoot(onBack = { navController.popBackStack() })
     }
 }
