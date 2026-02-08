@@ -14,7 +14,7 @@ fun DetailScreen(
     onAction: (DetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Text("Detail Screen")
+    Text("Item ID: ${uiState.item?.id}")
 }
 
 @Preview(showBackground = true)

@@ -82,7 +82,7 @@ fun MainScreen(
                         ) {
                             items(uiState.items, key = { it.id }) { item ->
                                 Card(
-                                    onClick = {},
+                                    onClick = { onAction(MainAction.OnItemClick(item.id)) },
                                     modifier = modifier
                                         .fillMaxWidth()
                                         .aspectRatio(1f),
