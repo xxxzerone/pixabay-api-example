@@ -43,9 +43,9 @@ fun MainScreen(
         ) {
             SearchInputField(
                 value = uiState.query,
-                onValueChange = {},
+                onValueChange = { onAction(MainAction.OnValueChange(it)) },
                 label = "Search",
-                onSearchAction = {}
+                onSearchAction = { onAction(MainAction.OnSearchAction(it)) }
             )
 
             Spacer(Modifier.height(30.dp))

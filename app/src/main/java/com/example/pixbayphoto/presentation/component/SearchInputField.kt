@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -46,10 +47,12 @@ fun SearchInputField(
                 )
             },
             trailingIcon = {
-                Icon(
-                    painter = painterResource(R.drawable.search_normal),
-                    contentDescription = "Search Button",
-                )
+                IconButton(onClick = { onSearchAction(value) }) {
+                    Icon(
+                        painter = painterResource(R.drawable.search_normal),
+                        contentDescription = "Search Button",
+                    )
+                }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(onSearch = { onSearchAction(value) }),

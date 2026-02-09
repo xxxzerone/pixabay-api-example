@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pixbayphoto.core.fold
 import com.example.pixbayphoto.domain.usecase.GetItemsSortedByIdUseCase
+import com.example.pixbayphoto.presentation.screen.main.MainEvent.OnNavigateToDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,7 +30,9 @@ class MainViewModel @Inject constructor(
 
     fun onAction(action: MainAction) {
         when (action) {
-            is MainAction.OnItemClick -> handleEvent(MainEvent.OnNavigateToDetail(action.id))
+            is MainAction.OnItemClick -> handleEvent(OnNavigateToDetail(action.id))
+            is MainAction.OnValueChange -> handleSearchValueChange(action.query)
+            is MainAction.OnSearchAction -> fetchItems(action.query)
         }
     }
 
@@ -44,6 +47,12 @@ class MainViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun handleSearchValueChange(query: String) {
+        _uiState.update {
+            it.copy(query = query)
         }
     }
 
