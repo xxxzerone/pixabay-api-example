@@ -16,7 +16,7 @@ fun DetailRoot(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                else -> {}
+                DetailEvent.NavigateToBack -> onBack()
             }
         }
     }

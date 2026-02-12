@@ -7,10 +7,10 @@ import com.example.pixbayphoto.domain.usecase.GetItemsSortedByIdUseCase
 import com.example.pixbayphoto.presentation.screen.main.MainEvent.OnNavigateToDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -21,8 +21,8 @@ class MainViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _uiEvent = MutableSharedFlow<MainEvent>(replay = 1)
-    val uiEvent = _uiEvent.asSharedFlow()
+    private val _uiEvent = Channel<MainEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     init {
         fetchItems(_uiState.value.query)
@@ -58,7 +58,7 @@ class MainViewModel @Inject constructor(
 
     private fun handleEvent(event: MainEvent) {
         viewModelScope.launch {
-            _uiEvent.emit(event)
+            _uiEvent.send(event)
         }
     }
 }
