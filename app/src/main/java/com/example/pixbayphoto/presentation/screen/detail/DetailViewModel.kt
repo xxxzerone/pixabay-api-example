@@ -25,10 +25,10 @@ class DetailViewModel @Inject constructor(
     private val _itemId = _detailRoute.itemId
 
     private val _uiState = MutableStateFlow(DetailUiState())
-    val uiState = _uiState.asStateFlow();
+    val uiState = _uiState.asStateFlow()
 
-    private val _uiEvent = MutableSharedFlow<DetailEvent>();
-    val uiEvent = _uiEvent.asSharedFlow();
+    private val _uiEvent = MutableSharedFlow<DetailEvent>()
+    val uiEvent = _uiEvent.asSharedFlow()
 
     init {
         fetchItem()

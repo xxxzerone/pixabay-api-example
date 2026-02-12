@@ -1,7 +1,6 @@
 package com.example.pixbayphoto.data.repository
 
 import com.example.pixbayphoto.domain.repository.ItemRepository
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

@@ -19,10 +19,10 @@ class MainViewModel @Inject constructor(
     private val getItemsSortedByIdUseCase: GetItemsSortedByIdUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MainUiState())
-    val uiState = _uiState.asStateFlow();
+    val uiState = _uiState.asStateFlow()
 
-    private val _uiEvent = MutableSharedFlow<MainEvent>();
-    val uiEvent = _uiEvent.asSharedFlow();
+    private val _uiEvent = MutableSharedFlow<MainEvent>(replay = 1)
+    val uiEvent = _uiEvent.asSharedFlow()
 
     init {
         fetchItems(_uiState.value.query)

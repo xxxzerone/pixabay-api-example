@@ -83,7 +83,7 @@ fun MainScreen(
                             items(uiState.items, key = { it.id }) { item ->
                                 Card(
                                     onClick = { onAction(MainAction.OnItemClick(item.id)) },
-                                    modifier = modifier
+                                    modifier = Modifier
                                         .fillMaxWidth()
                                         .aspectRatio(1f),
                                     shape = RoundedCornerShape(12.dp),
