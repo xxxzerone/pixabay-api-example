@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
+import jakarta.inject.Named
 import jakarta.inject.Singleton
 
 @Module
@@ -18,13 +19,17 @@ object DataSourceModule {
 
     @Singleton
     @Provides
+    @Named("pixabay_api_key")
     fun providesPixabayApiKey(@ApplicationContext context: Context): String {
         return context.getString(R.string.pixabay_api_key)
     }
 
     @Singleton
     @Provides
-    fun providesRemoteDataSource(apiKey: String, httpClient: HttpClient): DataSource {
+    fun providesRemoteDataSource(
+        @Named("pixabay_api_key") apiKey: String,
+        httpClient: HttpClient
+    ): DataSource {
         return RemoteDataSource(apiKey = apiKey, httpClient = httpClient)
     }
 }

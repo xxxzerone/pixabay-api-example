@@ -21,7 +21,7 @@ class ItemRepositoryImpl @Inject constructor(
                 ?: emptyList()
             emit(items)
         } else {
-            emit(emptyList())
+            throw RuntimeException("Failed to fetch items (status: ${response.statusCode})")
         }
     }
 
@@ -30,7 +30,7 @@ class ItemRepositoryImpl @Inject constructor(
         if (response.isSuccess()) {
             emit(response.body?.hits?.firstOrNull()?.let { itemMapper.toDomain(it) })
         } else {
-            emit(null)
+            throw RuntimeException("Failed to fetch item (status: ${response.statusCode})")
         }
     }
 }

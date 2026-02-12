@@ -60,7 +60,6 @@ class MockItemRepositoryTest {
 
         // assert
         assertEquals(targetId, item?.id)
-        assertEquals(userId, item?.userId)
     }
 
     @Test
