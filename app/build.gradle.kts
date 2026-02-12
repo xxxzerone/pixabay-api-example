@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.ApplicationExtension
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -23,6 +24,13 @@ plugins {
  * https://developer.android.com/build/migrate-to-built-in-kotlin?utm_source=chatgpt.com
  */
 val android = extensions.getByType<ApplicationExtension>()
+
+val localProperties = Properties().apply {
+    val propertiesFile = rootProject.file("local.properties")
+    if (propertiesFile.exists()) {
+        propertiesFile.inputStream().use { load(it) }
+    }
+}
 
 android.apply {
     namespace = "com.example.pixbayphoto"
@@ -58,7 +66,10 @@ android.apply {
     }
     buildFeatures {
         compose = true
+        resValues = true
     }
+
+    val pixabayApiKey = localProperties.getProperty("PIXABAY_API_KEY") ?: ""
 
     flavorDimensions += "version"
     productFlavors {
@@ -69,6 +80,7 @@ android.apply {
         }
         create("prod") {
             dimension = "version"
+            resValue("string", "pixabay_api_key", pixabayApiKey)
         }
     }
 }
@@ -94,6 +106,7 @@ dependencies {
     implementation(libs.ktor.client.okhttp)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.logging)
     testImplementation(libs.ktor.client.mock)
 
